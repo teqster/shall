@@ -1,10 +1,39 @@
 #
+# mocking commands by setting up aliases to mock functions
+#
+# only works if you call commands without abosulte paths... :(
+#
+_setupMocks()
+{
+    _SHALL_MOCKS=''
+    for f in $(declare -F|cut -d\  -f3-|grep '^mock_'|sort); do
+        mocked="${f#mock_}"
+        _SHALL_MOCKS="$_SHALL_MOCKS$mocked "
+        alias $mocked="$f"
+    done
+    hash -r
+}
+
+#
+# restore original commands after testing
+#
+_cleanupMocks()
+{
+    for m in $_SHALL_MOCKS; do
+      unalias $m
+    done
+    _SHALL_MOCKS=''
+    hash -r
+}
+
+#
 # running a single test and doing bookkeeping
 #
 _runTest()
 {
     func="$1"
     echo -n "Running $func.. "
+    _setupMocks
     if "$func"; then
         echo ok
         let _SHALL_OK++
@@ -23,9 +52,11 @@ testRun()
     _SHALL_FAIL=0
     _SHALL_FAIL_NAMES=''
     _SHALL_OK=0
+    _setupMocks
     for f in $(declare -F|cut -d\  -f3-|grep '^test_'|sort); do
         _runTest "$f"
     done
+    _cleanupMocks
     let SHALL_ALL=$_SHALL_OK+$_SHALL_FAIL
     echo "Results: $SHALL_ALL test(s), $_SHALL_OK succeeded, $_SHALL_FAIL failed."
     echo "Failing tests: $_SHALL_FAIL_NAMES"
