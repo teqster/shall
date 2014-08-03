@@ -2,15 +2,11 @@
 
 . ./shall
 
-parseRepoURL()
-{
-  curl https://api.github.com/users/teqster/repos 2>/dev/null|awk '/"html_url":/ {print $2}'|tr -d \"
-}
-
 # defining to how to mock curl
 # TODO: mock individual commands for individual tests (instead of globally mocking them)
 mock_curl()
 {
+  echo CALLING mock_curl >&2
   cat<<EOJ
 [
   {
@@ -18,6 +14,14 @@ mock_curl()
   }
 ]
 EOJ
+}
+
+# apply mocks globally
+setupMocks
+
+parseRepoURL()
+{
+  curl https://api.github.com/users/teqster/repos|awk '/"html_url":/ {print $2}'|tr -d \"
 }
 
 test_repoUrlParse()
@@ -28,14 +32,14 @@ test_repoUrlParse()
   # maybe something like
   #    assertOK 'parseRepoURL|grep -q https://github.com/teqster'
   # and eval later...
-  url=$(parseRepoURL|grep -q https://github.com/teqster)
-  assertOK test -n "$url"
+  url=$(parseRepoURL|grep https://github.com/teqster)
+  assertOK test -n \"$url\"
 }
 
 test_repoUrlParse2()
 {
-  url=$(parseRepoURL|grep -q https://github.com/teqster/foo)
-  assertFail test -n "$url"
+  url=$(parseRepoURL|grep https://github.com/teqster/foo)
+  assertFail test -n \"$url\"
 }
 
 testRun
