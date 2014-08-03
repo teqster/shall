@@ -31,12 +31,14 @@ test_repoUrlParse()
   # maybe something like
   #    assertOK 'parseRepoURL|grep -q https://github.com/teqster'
   # and eval later...
+  mock curl mock_curl
   url=$(parseRepoURL|grep https://github.com/teqster)
   assertOK test -n \"$url\"
 }
 
 test_repoUrlParse2()
 {
+  mock curl mock_curl
   url=$(parseRepoURL|grep https://github.com/teqster/foo)
   assertFail test -n \"$url\"
 }

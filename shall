@@ -5,31 +5,6 @@
 #
 
 #
-# function to globally apply mocks
-#
-_setupMocks()
-{
-    _SHALL_MOCKS=''
-    for f in $(declare -F|cut -d\  -f3-|grep '^mock_'|sort); do
-        mocked="${f#mock_}"
-        _SHALL_MOCKS="$_SHALL_MOCKS$mocked "
-        MOCK_FUNC="$(echo -e "$mocked()\n{\n$f \$@\n}")"
-        eval "$MOCK_FUNC"
-    done
-}
-
-#
-# restore original commands after testing
-#
-_cleanupMocks()
-{
-    for m in $_SHALL_MOCKS; do
-      unset $m
-    done
-    _SHALL_MOCKS=''
-}
-
-#
 # create a command mock
 #
 mock()
@@ -46,6 +21,9 @@ mock()
     eval "$MOCK_FUNC"
 }
 
+#
+# remove all created mocks
+#
 _unmock_all()
 {
     for m in $_SHALL_MOCKS; do
