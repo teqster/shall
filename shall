@@ -37,7 +37,12 @@ mock()
     cmd="$1"
     target="$2"
     _SHALL_MOCKS="$_SHAL_MOCKS$target "
-    MOCK_FUNC="$(echo -e "$cmd()\n{\n$target \$@\n}")"
+    if type "$target" 2>/dev/null|grep -q 'is a function'; then
+        MOCK_FUNC="$(echo -e "$cmd()\n{\n$target \$@\n}")"
+    else
+        unset "$cmd"
+        MOCK_FUNC="$(echo -e "$cmd()\n{\n$target\n}")"
+    fi
     eval "$MOCK_FUNC"
 }
 

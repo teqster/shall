@@ -43,4 +43,12 @@ test_repoUrlParse2()
   assertFail test -n \"$url\"
 }
 
+test_repoUrlParse3()
+{
+  # commands can be mocked as a simple line of
+  mock curl 'echo \"html_url\": \"https://github.com/teqster/bar\"'
+  url=$(parseRepoURL|grep https://github.com/teqster/bar)
+  assertOK test -n \"$url\"
+}
+
 testRun
