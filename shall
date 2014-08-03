@@ -1,0 +1,48 @@
+#
+# running a single test and doing bookkeeping
+#
+_runTest()
+{
+    func="$1"
+    echo -n "Running $func.. "
+    if "$func"; then
+        echo ok
+        let _SHALL_OK++
+    else
+        echo fail
+        let _SHALL_FAIL++
+        _SHALL_FAIL_NAMES="$_SHALL_FAIL_NAMES$func "
+    fi
+}
+
+#
+# runs all tests defined as function with 'test_' as function name prefix
+#
+testRun()
+{
+    _SHALL_FAIL=0
+    _SHALL_FAIL_NAMES=''
+    _SHALL_OK=0
+    for f in $(declare -F|cut -d\  -f3-|grep '^test_'|sort); do
+        _runTest "$f"
+    done
+    let SHALL_ALL=$_SHALL_OK+$_SHALL_FAIL
+    echo "Results: $SHALL_ALL test(s), $_SHALL_OK succeeded, $_SHALL_FAIL failed."
+    echo "Failing tests: $_SHALL_FAIL_NAMES"
+}
+
+#
+# helper functions
+#
+
+assertOK()
+{
+    $*
+}
+
+assertFail()
+{
+    $* || true
+}
+
+# vi:ts=4:st=4:et:ai:
