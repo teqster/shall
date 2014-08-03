@@ -36,7 +36,7 @@ mock()
 {
     cmd="$1"
     target="$2"
-    _SHALL_MOCKS="$_SHAL_MOCKS$cmd "
+    _SHALL_MOCKS="$_SHAL_MOCKS$target "
     MOCK_FUNC="$(echo -e "$cmd()\n{\n$target \$@\n}")"
     eval "$MOCK_FUNC"
 }
