@@ -17,7 +17,6 @@ EOJ
 }
 
 # apply mocks globally
-setupMocks
 
 parseRepoURL()
 {

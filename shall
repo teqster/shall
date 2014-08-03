@@ -7,16 +7,15 @@
 #
 # function to globally apply mocks
 #
-setupMocks()
+_setupMocks()
 {
     _SHALL_MOCKS=''
-    shopt -s expand_aliases
     for f in $(declare -F|cut -d\  -f3-|grep '^mock_'|sort); do
         mocked="${f#mock_}"
         _SHALL_MOCKS="$_SHALL_MOCKS$mocked "
-        alias $mocked=$f
+        MOCK_FUNC="$(echo -e "$mocked()\n{\n$f \$@\n}")"
+        eval "$MOCK_FUNC"
     done
-    hash -r
 }
 
 #
@@ -25,10 +24,9 @@ setupMocks()
 _cleanupMocks()
 {
     for m in $_SHALL_MOCKS; do
-      unalias $m
+      unset $m
     done
     _SHALL_MOCKS=''
-    shopt -u expand_aliases
 }
 
 #
@@ -56,7 +54,7 @@ testRun()
     _SHALL_FAIL=0
     _SHALL_FAIL_NAMES=''
     _SHALL_OK=0
-    shopt|grep expand
+    _setupMocks
     for f in $(declare -F|cut -d\  -f3-|grep '^test_'|sort); do
         _runTest "$f"
     done
