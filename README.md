@@ -41,6 +41,7 @@ Todos ("Roadmap")
 - ensure Bourne Shell compatibility
 - add more assert helpers, if meaningful
 - add script option which runs testRun automatically ("--shall run")
+- add mocking functionality
 
 
 License
