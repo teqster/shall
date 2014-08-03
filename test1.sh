@@ -32,6 +32,6 @@ test_assertFAIL_expand()
     assertFail test 5 -lt 2
 }
 
-testRun
+testRun || echo You have errors...
 
 # vi:st=4:ts=4:et:ai:

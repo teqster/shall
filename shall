@@ -29,6 +29,8 @@ testRun()
     let SHALL_ALL=$_SHALL_OK+$_SHALL_FAIL
     echo "Results: $SHALL_ALL test(s), $_SHALL_OK succeeded, $_SHALL_FAIL failed."
     echo "Failing tests: $_SHALL_FAIL_NAMES"
+    test $_SHALL_FAIL -eq 0
+    return $?
 }
 
 #
