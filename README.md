@@ -81,7 +81,7 @@ This does the same, but without the need for a mock function.
 
 Mocks will be cleaned up after each test function. You can access the original commands using the 'orig_' prefix in the mock code. testPrimeTuesday.sh gives you some example how to do this using the date command.
 
-The mocking feature is - like all of shall - in a very early state, subject to change and experimentation, so please do not yet rely on it too much.
+The mocking feature is - like all of shall - in a very early state, subject to change and experimentation, so please do not yet rely on it too much (as if anybody would use this anyway... :) ).
 
 Todos ("Roadmap")
 =================
