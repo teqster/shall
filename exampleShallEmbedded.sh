@@ -25,10 +25,16 @@
 #SHALLEND
 eval "$(sed -n -e '/^#SHALLSTART/,/^#SHALLEND/p' "$0"|sed -e '/^#SHALL/d' -e 's/^#//'|base64 -d -|gzip -dc -)"
 
-# just to proof that shall is actually there..
+# just to show that shall is actually there..
 test_noop()
 {
     assertOK true
+}
+test_foop()
+{
+  mock date 'orig_date -d 20140101 $@'
+  # Jan 1, 2014 was a Wednesday?
+  assertOK test $(date +%w) -eq 3
 }
 
 testRun
