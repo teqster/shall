@@ -51,14 +51,14 @@ In order to provide tests with a defined environment, you might want to create m
     }
     myWhoami()
     {
-        echo 'foo'
+        echo 'teqster'
     }
     test_checkUser()
     {
         mock whoami myWhoami
         output=$(checkUser|grep Welcome)
         # output not empty?
-        assertOK test -n \"$output"
+        assertOK test -n \"$output\"
     }
 
 The above example defines a function checkUser and a test called test_checkUser, which is using the function myWhoami as mock command for whoami. Often, mock commands will be rather simplistic, so mocking a command with some line(s) of shell script instead of shell functions is possible:
@@ -71,7 +71,7 @@ The above example defines a function checkUser and a test called test_checkUser,
     }
     test_checkUser()
     {
-        mock whoami 'echo foo'
+        mock whoami 'echo teqster'
         output=$(checkUser|grep Welcome)
         # output not empty?
         assertOK test -n \"$output"
