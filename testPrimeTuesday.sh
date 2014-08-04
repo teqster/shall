@@ -54,7 +54,7 @@ if test $RUNSHALL; then
     
     test_Wednesday()
     {
-        mock date 'orig_date -d 20140812 $@'
+        mock date 'orig_date -d 20140813 $@'
         assertFail isTuesday
     }
     
@@ -66,7 +66,7 @@ if test $RUNSHALL; then
     
     test_NoPrime()
     {
-        mock date 'orig_date -d 20140805 $@'
+        mock date 'orig_date -d 20140809 $@'
         assertFail isPrime
     }
     test_PrimeTuesday()
@@ -98,7 +98,7 @@ if test $RUNSHALL; then
     test_ZZMoreNonPrimes()
     {
         # try some dates which are not primes
-        for d in 20140801 20140802 20140821; do
+        for d in 20140801 20140804 20140821; do
             mock date "orig_date -d $d \$@"
             assertFail isPrime || return 1
         done

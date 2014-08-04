@@ -83,7 +83,9 @@ assertOK()
 
 assertFail()
 {
-    eval "$*" || true
+    eval "$*"
+    RET=$?
+    test $RET -ne 0
 }
 
 # vi:ts=4:st=4:et:ai:
