@@ -18,6 +18,11 @@ mock()
         unset "$cmd"
         MOCK_FUNC="$(echo -e "$cmd()\n{\n$target\n}")"
     fi
+
+    WHICH=$(which $cmd)
+    ORIG_FUNC="$(echo -e "orig_$cmd()\n{\n$WHICH \$@\n}")"
+    _SHALL_MOCKS="$_SHAL_MOCKS$orig_cmd "
+    eval "$ORIG_FUNC"
     eval "$MOCK_FUNC"
 }
 
