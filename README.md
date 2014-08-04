@@ -8,6 +8,9 @@ Currently, it is used for bash scripts, so Bourne shell compatibility might not 
 Usage
 =====
 
+Test Functions
+--------------
+
 Include shall in your script:
 
     . ./shall
@@ -35,13 +38,59 @@ This way, you can simply add all your test case to the script that you want to u
         exit
     fi
 
+Mocking
+-------
+
+In order to provide tests with a defined environment, you might want to create mock commands which create defined output, leaving defined state, just as you want mock objects in other programming environments. In order to do so, shall comes with the 'mock' function which lets you override any other function or command with whatever you want:
+
+    checkUser()
+    {
+        if test $(whoami) = 'teqster'; then
+          echo "Welcome, you are the right user."
+        fi
+    }
+    myWhoami()
+    {
+        echo 'foo'
+    }
+    test_checkUser()
+    {
+        mock whoami myWhoami
+        output=$(checkUser|grep Welcome)
+        # output not empty?
+        assertOK test -n \"$output"
+    }
+
+The above example defines a function checkUser and a test called test_checkUser, which is using the function myWhoami as mock command for whoami. Often, mock commands will be rather simplistic, so mocking a command with some line(s) of shell script instead of shell functions is possible:
+
+    checkUser()
+    {
+        if test $(whoami) = 'teqster'; then
+          echo "Welcome, you are the right user."
+        fi
+    }
+    test_checkUser()
+    {
+        mock whoami 'echo foo'
+        output=$(checkUser|grep Welcome)
+        # output not empty?
+        assertOK test -n \"$output"
+    }
+
+This does the same, but without the need for a mock function. 
+
+Mocks will be cleaned up after each test function. You can access the original commands using the 'orig_' prefix in the mock code. testPrimeTuesday.sh gives you some example how to do this using the date command.
+
+The mocking feature is - like all of shall - in a very early state, subject to change and experimentation, so please do not yet rely on it too much.
+
 Todos ("Roadmap")
 =================
 
 - ensure Bourne Shell compatibility
 - add more assert helpers, if meaningful
+- make everything much more robust!
 - add script option which runs testRun automatically ("--shall run")
-- add mocking functionality
+- improve mocking functionality
 
 
 License
